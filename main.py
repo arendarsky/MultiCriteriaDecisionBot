@@ -37,6 +37,7 @@ def handle_document(update, context):
             return
         df = di.get_df_bypath(file_path)
         additional_criteria(update, context, df, weights)
+        return
     di.save_data(update.effective_chat.id, file_path)
     context.bot.send_message(chat_id=update.effective_chat.id, text="Данные сохранены!", reply_markup=rm.reply_kb_markup)
 
