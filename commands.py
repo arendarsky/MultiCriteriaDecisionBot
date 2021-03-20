@@ -37,6 +37,15 @@ def ideal_point(update, context):
     get_result(update.effective_chat.id, mcm.ideal_point_method, context.bot)
 
 
+def additional_criteria(update, context, add_df, weights):
+    df = di.get_df(update.effective_chat.id)
+    ps = mcm.pareto_set(df)
+    jdf = ps.join(add_df)
+    rdf = mcm.weighted_sum(jdf, weights)
+    path = di.save_result(update.effective_chat.id, rdf)
+    send_result_file(update.effective_chat.id, path, context.bot)
+
+
 commands = {
     command_names.pareto: pareto,
     command_names.weighted_sum: weighted_sum_message,

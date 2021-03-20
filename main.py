@@ -3,7 +3,7 @@ from telegram.ext import MessageHandler, CommandHandler, Filters, Updater
 import data_interactions as di
 import reply_markups as rm
 import command_names
-from commands import commands, weighted_sum
+from commands import commands, weighted_sum, additional_criteria
 import logging
 import json
 
@@ -29,6 +29,14 @@ def handle_document(update, context):
     document = update.message.document
     file = bot.get_file(document.file_id)
     file_path = file.file_path
+    caption = update.message.caption
+    if caption:
+        try:
+            weights = json.loads(caption)
+        except JSONDecodeError:
+            return
+        df = di.get_df_bypath(file_path)
+        additional_criteria(update, context, df, weights)
     di.save_data(update.effective_chat.id, file_path)
     context.bot.send_message(chat_id=update.effective_chat.id, text="Данные сохранены!", reply_markup=rm.reply_kb_markup)
 

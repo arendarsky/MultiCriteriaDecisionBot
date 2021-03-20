@@ -29,4 +29,8 @@ def get_df(chat_id):
     f = open(data_prefix + str(chat_id), "r")
     file_path = f.read()
     f.close()
-    return pd.read_csv(file_path, index_col=0)
+    return get_df_bypath(file_path)
+
+
+def get_df_bypath(path):
+    return pd.read_csv(path, index_col=0)
